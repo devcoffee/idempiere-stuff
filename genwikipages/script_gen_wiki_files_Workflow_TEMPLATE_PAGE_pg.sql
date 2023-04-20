@@ -1,47 +1,45 @@
 -- run as
--- psql -d idempiere -U adempiere -q -P tuples_only=on -P footer=off -Pborder=0 -P format=unaligned -f script_gen_wiki_files_Workflow_TEMPLATE_PAGE_pg.sql > /tmp/script_gen_wiki_files_Workflow_TEMPLATE_PAGE_pg.sh
+-- psql -h db-dev.devcoffee.cloud -d mht_cd10 -U adempiere -q -P tuples_only=on -P footer=off -Pborder=0 -P format=unaligned -f script_gen_wiki_files_Workflow_TEMPLATE_PAGE_pg.sql > ./docs/script_gen_wiki_files_Workflow_TEMPLATE_PAGE_pg.sh
 -- and then execute the generated script
 SELECT
-'cat > "/tmp/wiki/Template:'||translate(f.name,' /','_-')||'_(Workflow_ID-'||f.ad_workflow_id||'_V1.0.0).wiki" <<!
-== Workflow: '||f.name||' ==
+'cat > "./workflow/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'_Workflow_ID-'||f.ad_workflow_id||'_v10.0.0.md" <<!
+# Fluxo de Trabalho: '||coalesce(wtrl.name,f.name)||' 
 
-''''''Description:'''''' '||coalesce(f.description,'')||'
+**[Criado em:** ' || to_char(f.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(f.updated,'dd/mm/YYYY') || ' **]**  
+**Descrição:** '||encodehtml(coalesce(coalesce(wtrl.description,f.description),''))||'  
+**Ajuda:** '||encodehtml(coalesce(coalesce(wtrl.help,f.help),''))||'
 
-''''''Help:'''''' '||coalesce(f.help,'')||'
+![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'-Workflow_BrERP_v10.0.0.png)
 
-[[Image:'||translate(f.name,' /','_-')||'_-_Workflow_(iDempiere_1.0.0).png|border]]
+Tabela: Campos
 
-{| border="1" cellpadding="5" cellspacing="0" align="center"
-|+''''''Workflow Nodes''''''
-!style="background:#efefef;" width="100"|Name
-!style="background:#efefef;" width="150"|Description
-!style="background:#efefef;" width="300"|Help
-!style="background:#efefef;" width="100"|Type
-!style="background:#efefef;" width="80"|Zoom
-'||
+<table> 
+<tr>
+<th>Nome</th> 
+<th>Descrição</th> 
+<th>Ajuda</th>
+<th>Tipo</th>
+<th>Zoom</th> 
+</tr> ' ||
 coalesce(nodes.nodes,'')
-||'
-|}
+|| '</table>
+
 !
+
+cp ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'-Workflow_BrERP_v10.0.0.png
 ' AS wikitext
 --,'en_US_base', 'F' AS TYPE, m.ad_menu_id, m.ad_workflow_id, m.NAME,m.description, f.HELP, f.ISBETAFUNCTIONALITY
     FROM AD_Menu m
         JOIN AD_Workflow f ON (m.ad_workflow_id=f.ad_workflow_id)
+        LEFT JOIN AD_Workflow_Trl wtrl ON wtrl.AD_language = 'pt_BR' AND wtrl.AD_Workflow_ID = f.AD_Workflow_ID
         LEFT JOIN (
             SELECT n.ad_workflow_id, 
                    string_agg(
-                       '|-valign="top"'
-                       ||chr(10)||'|'
-                       ||coalesce(n.name,'')
-                       ||chr(10)||'|'
-                       ||coalesce(n.description,'')
-                       ||chr(10)||'|'
-                       ||coalesce(n.help,'')
-                       ||chr(10)||'|'
-                       ||(SELECT coalesce(name,'') FROM ad_ref_list WHERE ad_reference_id=302 AND value=n.ACTION)
-                       ||chr(10)||'|'
-                       ||coalesce(coalesce(w.NAME,coalesce(p.NAME,coalesce(o.NAME,coalesce(t.NAME,n.NAME)))),'')
-                       ||chr(10)
+                       '<tr><td>' ||coalesce(coalesce(ntrl.name,n.name),'') || '</td>' || 
+                       '<td>' ||encodehtml(coalesce(coalesce(ntrl.description,n.description),'')) || '</td>' || 
+                       '<td>' ||encodehtml(coalesce(coalesce(ntrl.help,n.help),'')) || '</td>' || 
+                       '<td>' ||(SELECT coalesce(name,'') FROM ad_ref_list WHERE ad_reference_id=302 AND value=n.ACTION) || '</td>' || 
+                       '<td>' ||coalesce(coalesce(w.NAME,coalesce(p.NAME,coalesce(o.NAME,coalesce(t.NAME,n.NAME)))),'') || '</td></tr>' 
                      , '' ORDER BY tr.depth) AS nodes
                 FROM (
                     WITH RECURSIVE nodeswf(ad_workflow_id, ad_wf_node_id, ad_wf_next_id, DEPTH) AS (
@@ -58,6 +56,7 @@ coalesce(nodes.nodes,'')
                     SELECT * FROM nodeswf
                     ) AS tr
                     JOIN AD_WF_NODE n ON (tr.ad_wf_node_id=n.ad_wf_node_id)
+                    LEFT JOIN AD_WF_Node_Trl ntrl ON ntrl.AD_Language = 'pt_BR' AND ntrl.AD_WF_NODE_ID = n.AD_WF_NODE_ID
                     LEFT JOIN AD_WINDOW w USING (ad_window_id)
                     LEFT JOIN AD_PROCESS p USING (ad_process_id)
                     LEFT JOIN AD_FORM o ON (n.ad_form_id=o.ad_form_id)
@@ -65,7 +64,7 @@ coalesce(nodes.nodes,'')
                 WHERE n.isactive='Y'
                 GROUP BY n.ad_workflow_id
              ) AS nodes ON (nodes.ad_workflow_id=f.ad_workflow_id)
-    WHERE m.ad_menu_id < 1000000
-        AND m.action = 'F'
+    WHERE --m.ad_menu_id < 1000000
+         m.action = 'F'
         AND m.isactive = 'Y'
     ORDER BY f.ad_workflow_id;

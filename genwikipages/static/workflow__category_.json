@@ -1,0 +1,8 @@
+{
+  "label": "Fluxos de Trabalho",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Lista dos fluxos de trabalho disponíveis no BrERP"
+  }
+}

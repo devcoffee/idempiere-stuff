@@ -1,0 +1,8 @@
+{
+  "label": "Janelas de Informação",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "description": "Lista das janelas de informação disponíveis no BrERP"
+  }
+}

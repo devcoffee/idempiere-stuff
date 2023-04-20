@@ -1,0 +1,8 @@
+{
+  "label": "Tarefa",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Lista das tarefas disponíveis no BrERP"
+  }
+}

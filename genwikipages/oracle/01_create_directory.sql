@@ -1,4 +1,4 @@
-CREATE OR REPLACE DIRECTORY dir_temp AS '/tmp/ADEMPIERE_MANUAL';
+CREATE OR REPLACE DIRECTORY dir_temp AS './docs/ADEMPIERE_MANUAL';
 
 /*
 Remember also that you must give permissions

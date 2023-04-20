@@ -1,21 +1,26 @@
 -- run as
--- psql -d idempiere -U adempiere -q -P tuples_only=on -P footer=off -Pborder=0 -P format=unaligned -f script_gen_wiki_files_Window_TEMPLATE_PAGE_pg.sql > /tmp/script_gen_wiki_files_Window_TEMPLATE_PAGE_pg.sh
+-- psql -h db-dev.devcoffee.cloud  -d mht_cd10 -U adempiere -q -P tuples_only=on -P footer=off -Pborder=0 -P format=unaligned -f script_gen_wiki_files_Form_TEMPLATE_PAGE_pg.sql > ./docs/script_gen_wiki_files_Form_TEMPLATE_PAGE_pg.sh
 -- and then execute the generated script
 SELECT
-'cat > "/tmp/wiki/Template:'||translate(f.name,' /','_-')||'_(Form_ID-'||f.ad_form_id||'_V1.0.0).wiki" <<!
-== Form: '||f.name||' ==
+'cat > ./form/'||regexp_replace(unaccent(coalesce(ftrl.name,f.name)), '[^\w]+','','g')||'_Form_ID-'||f.ad_form_id||'_v10.0.0.md <<!
+# Formulário: '||coalesce(ftrl.name,f.name)||'
 
-''''''Description:'''''' '||coalesce(f.description,'')||'
+**[Criado em:** ' || to_char(f.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(f.updated,'dd/mm/YYYY') || ' **]**  
+**Descrição:** '||encodehtml(coalesce(coalesce(ftrl.description,f.description),''))||'  
+**Ajuda:** '||encodehtml(coalesce(coalesce(ftrl.help,f.help),''))||'
+**Classe:** ['||coalesce(f.classname,'')||'](https://javadoc.brerp.com.br/API/'|| replace(coalesce(f.classname,''),'.','/') || '.html)
 
-''''''Help:'''''' '||coalesce(f.help,'')||'
+![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(ftrl.name,f.name)), '[^\w]+','','g')||'-Form_BrERP_v10.0.0.png)
 
-[[Image:'||translate(f.name,' /','_-')||'_-_Form_(iDempiere_1.0.0).png|border]]
 !
+
+cp ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(ftrl.name,f.name)), '[^\w]+','','g')||'-Form_BrERP_v10.0.0.png
 ' AS wikitext
 --,'en_US_base', m.ad_menu_id, m.ad_form_id, m.NAME,m.description, f.HELP, f.classname, f.ISBETAFUNCTIONALITY
           FROM AD_MENU m, AD_FORM f
-         WHERE m.ad_menu_id < 1000000
-           AND m.action = 'X'
+          LEFT JOIN AD_Form_Trl ftrl ON ftrl.AD_Language = 'pt_BR' AND ftrl.AD_Form_ID = f.AD_Form_ID 
+         WHERE --m.ad_menu_id < 1000000
+           m.action = 'X'
            AND m.isactive = 'Y'
            AND m.ad_form_id = f.ad_form_id
       ORDER BY f.ad_form_id;
