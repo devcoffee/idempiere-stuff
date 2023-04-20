@@ -43,11 +43,10 @@ Tabela ' || t.seqno || ': ' || coalesce(ttrl.name,t.name) || ' - Campos
          string_agg('<tr>'  ||
                         '<td>' || coalesce(f.name,'') || '</td>' ||
                         '<td>' || encodehtml(coalesce(f.description,'')) || '</td>' ||
-                        '<td>' || encodehtml(coalesce(f.help,'')) || '</td>' ||
-                        '<td> <br> ' || '<small>' ||  '<br/> [' || coalesce(lower(dbtable), '') || '](https://schemaspy.brerp.com.br/adempiere/tables/' || coalesce(lower(dbtable), '') || '.html) ' ||'.'|| coalesce(dbcolumn,'') ||
-                                  ' <br/> ' || coalesce(dbtype, '')  ||' <br/> '|| coalesce(adempieretype,'') ||
-                                  '</small>' ||
-                        '</td>' ||
+                        '<td>' || encodehtml(coalesce(f.help,'')) || '</td>'
+                        '<td>' || chr(10) ||chr(10) ||
+                        '[' || coalesce(lower(dbtable), '') || '](https://schemaspy.brerp.com.br/adempiere/tables/' || coalesce(lower(dbtable), '') || '.html)' ||'.'|| coalesce(dbcolumn,'')  || chr(10) ||chr(10) ||
+                        '<small> ' || coalesce(dbtype, '')  ||' <br/> '|| coalesce(adempieretype,'') || '</small>' || '</td>' ||
                        '</tr>' , '' ORDER BY f.seqfld) AS flds
             FROM rv_query_for_manual f
             WHERE f.ad_tab_id=t.ad_tab_id
