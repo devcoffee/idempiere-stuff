@@ -4,19 +4,20 @@
 -- and then execute the generated script
 
 SELECT
-'cat <<! | sed -e ''$d'' | sed -e ''$d'' > ./window/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g')||'_Window_ID-'||w.ad_Window_id||'_v10.0.0.md
+'cat <<! | sed -e ''$d'' | sed -e ''$d'' > ./window/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g')||'_Window_ID-'||w.ad_Window_id||'_v12.0.0.md
 # Janela: '||coalesce(wtrl.name,w.name)|| '
 
 **[Criado em:** ' || to_char(w.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(w.updated,'dd/mm/YYYY') || ' **]**  
 **Descrição:** '||encodehtml(coalesce(coalesce(wtrl.description,w.description),''))|| '  
 **Ajuda:** '||encodehtml(coalesce(coalesce(wtrl.help,w.help),'')) || '  
-![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g') || '-Window_BrERP_v10.0.0.png)'|| '
+![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g') || '-Window_BrERP_v12.0.0.png)'|| '
 
 ' || coalesce(tab.tabs,'') || '
 
 !
 
-cp ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g') || '-Window_BrERP_v10.0.0.png
+cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g') || '-Window_BrERP_v12.0.0.png
+
 ' AS wikitext
 --,ad_language, ad_window_id, ad_tab_id, ad_field_id, TYPE, NAME, description, HELP, seqtab, seqfld, dbtable, dbcolumn, dbtype, adempieretype, ISBETAFUNCTIONALITY
     FROM AD_Menu m
@@ -33,26 +34,23 @@ cp ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(wtrl
 
 Tabela ' || t.seqno || ': ' || coalesce(ttrl.name,t.name) || ' - Campos 
 
-' ||    '<table>' ||
-        '<tr>' ||
-        '<th>Nome</th>' ||
-        '<th>Descrição</th>' ||
-        '<th>Ajuda</th>' ||
-        '<th>Dados Técnicos</th>'||
-        '</tr>' || (SELECT
-         string_agg('<tr>'  ||
-                        '<td>' || coalesce(f.name,'') || '</td>' ||
-                        '<td>' || encodehtml(coalesce(f.description,'')) || '</td>' ||
-                        '<td>' || encodehtml(coalesce(f.help,'')) || '</td>'
-                        '<td>' || chr(10) ||chr(10) ||
-                        '[' || coalesce(lower(dbtable), '') || '](https://schemaspy.brerp.com.br/adempiere/tables/' || coalesce(lower(dbtable), '') || '.html)' ||'.'|| coalesce(dbcolumn,'')  || chr(10) ||chr(10) ||
-                        '<small> ' || coalesce(dbtype, '')  ||' <br/> '|| coalesce(adempieretype,'') || '</small>' || '</td>' ||
-                       '</tr>' , '' ORDER BY f.seqfld) AS flds
-            FROM rv_query_for_manual f
-            WHERE f.ad_tab_id=t.ad_tab_id
+' ||    'Tabela: Parâmetros do Relatório
+| **Nome** | **Descrição** | **Ajuda** | **Dados Técnicos** |
+|----------|---------------|-----------|--------------------|
+' || (SELECT
+         string_agg(
+            ' | ' || coalesce(f.name,'') ||
+            ' | ' || encodehtml(coalesce(f.description,'')) ||
+            ' | ' || encodehtml(coalesce(f.help,'')) ||
+            ' | [' || coalesce(lower(dbtable), '') || '](https://schemaspy.brerp.com.br/adempiere/tables/' || coalesce(lower(dbtable), '') || '.html)' ||'.'|| coalesce(dbcolumn,'') ||
+            '<small> ' || coalesce(dbtype, '')  ||' <br/> '|| coalesce(adempieretype,'') || '</small>' || 
+            ' | ' || chr(10), ''
+                ORDER BY f.seqfld)
+                FROM rv_query_for_manual f
+                WHERE f.ad_tab_id=t.ad_tab_id
                 AND f.ad_field_id>0
                 AND f.ad_language='pt_BR'
-        ) || '</table>
+            ) || '
 
 '  , '' ORDER BY t.seqno) AS tabs
                 FROM ad_tab t

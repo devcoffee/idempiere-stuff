@@ -53,7 +53,6 @@ do
 		if [ "$opentable" = "Y" ]
 		then
             # Table is Open -> Close Table
-	   		echo "</table>"
 			echo
 			echo
 	    	opentable="N"
@@ -72,7 +71,6 @@ do
 		if [ "$opentable" = "Y" ] && [ "$level" -eq 1 ]
 		then
 		 	# Table is Open -> Close Table
-	   		echo "</table>"
 			echo
 			echo
 	    	opentable="N"
@@ -81,27 +79,16 @@ do
 		if [ "$opentable" = "N" ]
 		then
 			# Flag activated to indicate Table is Open
-			echo "<table>"
+			echo "
+| **Item** | **Tipo** | **Detalhes** |
+|---|---|---|"
 			#echo "|-"
 			opentable="Y"
 		fi
-		
-        echo '<tr>'
-		echo '<td>'
-		echo ''
+
 		namet=`echo $name | tr ' ' '_' | tr '/' '-'`
 		actionl=`echo "$action" | tr '[:upper:]' '[:lower:]'`
-		echo "[${name}](./${actionl}/${name_encoded}_${action}_ID-${id}_v10.0.0.md)"
-		echo 
-		echo -n '</td><td>'
-		echo -n $action
-		echo '</td><td><small>'
-		echo
-		echo $technical
-		echo
-		echo '</small></td>'
-		echo '</tr>'
-		echo
+		echo "| [${name}](./${actionl}/${name_encoded}_${action}_ID-${id}_v12.0.0.md) | $action | <small><br/> $technical <br/></small> |<br/>"
     fi
 done
-echo "</table>"
+

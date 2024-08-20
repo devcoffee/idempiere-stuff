@@ -2,31 +2,27 @@
 -- psql -h db-dev.devcoffee.cloud -d mht_cd10 -U adempiere -q -P tuples_only=on -P footer=off -Pborder=0 -P format=unaligned -f script_gen_wiki_files_Workflow_TEMPLATE_PAGE_pg.sql > ./docs/script_gen_wiki_files_Workflow_TEMPLATE_PAGE_pg.sh
 -- and then execute the generated script
 SELECT
-'cat > "./workflow/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'_Workflow_ID-'||f.ad_workflow_id||'_v10.0.0.md" <<!
+'cat > "./workflow/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'_Workflow_ID-'||f.ad_workflow_id||'_v12.0.0.md" <<!
 # Fluxo de Trabalho: '||coalesce(wtrl.name,f.name)||' 
 
 **[Criado em:** ' || to_char(f.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(f.updated,'dd/mm/YYYY') || ' **]**  
 **Descrição:** '||encodehtml(coalesce(coalesce(wtrl.description,f.description),''))||'  
 **Ajuda:** '||encodehtml(coalesce(coalesce(wtrl.help,f.help),''))||'
 
-![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'-Workflow_BrERP_v10.0.0.png)
+![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'-Workflow_BrERP_v12.0.0.png)
 
 Tabela: Campos
 
-<table> 
-<tr>
-<th>Nome</th> 
-<th>Descrição</th> 
-<th>Ajuda</th>
-<th>Tipo</th>
-<th>Zoom</th> 
-</tr> ' ||
+| **Nome** | **Descrição** | **Ajuda** | **Tipo** | **Zoom** |
+|----------|---------------|-----------|----------|----------|
+' ||
 coalesce(nodes.nodes,'')
-|| '</table>
+|| '
 
 !
 
-cp ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'-Workflow_BrERP_v10.0.0.png
+cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'-Workflow_BrERP_v12.0.0.png
+
 ' AS wikitext
 --,'en_US_base', 'F' AS TYPE, m.ad_menu_id, m.ad_workflow_id, m.NAME,m.description, f.HELP, f.ISBETAFUNCTIONALITY
     FROM AD_Menu m
@@ -35,12 +31,13 @@ cp ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(wtrl
         LEFT JOIN (
             SELECT n.ad_workflow_id, 
                    string_agg(
-                       '<tr><td>' ||coalesce(coalesce(ntrl.name,n.name),'') || '</td>' || 
-                       '<td>' ||encodehtml(coalesce(coalesce(ntrl.description,n.description),'')) || '</td>' || 
-                       '<td>' ||encodehtml(coalesce(coalesce(ntrl.help,n.help),'')) || '</td>' || 
-                       '<td>' ||(SELECT coalesce(name,'') FROM ad_ref_list WHERE ad_reference_id=302 AND value=n.ACTION) || '</td>' || 
-                       '<td>' ||coalesce(coalesce(w.NAME,coalesce(p.NAME,coalesce(o.NAME,coalesce(t.NAME,n.NAME)))),'') || '</td></tr>' 
-                     , '' ORDER BY tr.depth) AS nodes
+                       ' | ' || coalesce(coalesce(ntrl.name,n.name),'') ||
+                       ' | ' || encodehtml(coalesce(coalesce(ntrl.description,n.description),'')) || 
+                       ' | ' || encodehtml(coalesce(coalesce(ntrl.help,n.help),'')) || 
+                       ' | ' || (SELECT coalesce(name,'') FROM ad_ref_list WHERE ad_reference_id=302 AND value=n.ACTION) ||
+                       ' | ' || coalesce(coalesce(w.NAME,coalesce(p.NAME,coalesce(o.NAME,coalesce(t.NAME,n.NAME)))),'') ||
+                       ' | ' || chr(10), ''
+                       ORDER BY tr.depth) AS nodes
                 FROM (
                     WITH RECURSIVE nodeswf(ad_workflow_id, ad_wf_node_id, ad_wf_next_id, DEPTH) AS (
                         SELECT w.ad_workflow_id, w.ad_wf_node_id,      wnn.ad_wf_next_id,  1
