@@ -31,7 +31,7 @@ LEFT JOIN AD_REPORTVIEW rv ON (f.ad_reportview_id = rv.ad_reportview_id)
 LEFT JOIN (
     SELECT pp.ad_process_id, 
            string_agg(
-            ' | ' || coalesce(coalesce(pptrl.name, pp.name), '') || 
+            '| ' || coalesce(coalesce(pptrl.name, pp.name), '') || 
             ' | ' || encodehtml(coalesce(coalesce(pptrl.description, pp.description), '')) || 
             ' | ' || encodehtml(coalesce(coalesce(pptrl.help, pp.help), '')) || 
             ' | ' || coalesce(pp.columnname, '') || 
@@ -44,7 +44,7 @@ LEFT JOIN (
     WHERE pp.isactive='Y'
     GROUP BY pp.ad_process_id
 ) AS prm ON (prm.ad_process_id=f.ad_process_id)
-WHERE --m.ad_menu_id < 1000000
+WHERE --m.ad_menu_id < 1000000 AND
          m.action = 'P'
 AND m.isactive = 'Y'
 ORDER BY f.ad_process_id;

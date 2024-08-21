@@ -31,7 +31,7 @@ cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(w
         LEFT JOIN (
             SELECT n.ad_workflow_id, 
                    string_agg(
-                       ' | ' || coalesce(coalesce(ntrl.name,n.name),'') ||
+                       '| ' || coalesce(coalesce(ntrl.name,n.name),'') ||
                        ' | ' || encodehtml(coalesce(coalesce(ntrl.description,n.description),'')) || 
                        ' | ' || encodehtml(coalesce(coalesce(ntrl.help,n.help),'')) || 
                        ' | ' || (SELECT coalesce(name,'') FROM ad_ref_list WHERE ad_reference_id=302 AND value=n.ACTION) ||
@@ -61,7 +61,7 @@ cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(w
                 WHERE n.isactive='Y'
                 GROUP BY n.ad_workflow_id
              ) AS nodes ON (nodes.ad_workflow_id=f.ad_workflow_id)
-    WHERE --m.ad_menu_id < 1000000
+    WHERE --m.ad_menu_id < 1000000 AND
          m.action = 'F'
         AND m.isactive = 'Y'
     ORDER BY f.ad_workflow_id;

@@ -20,7 +20,7 @@ cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(f
 --,'en_US_base', m.ad_menu_id, m.ad_form_id, m.NAME,m.description, f.HELP, f.classname, f.ISBETAFUNCTIONALITY
           FROM AD_MENU m, AD_FORM f
           LEFT JOIN AD_Form_Trl ftrl ON ftrl.AD_Language = 'pt_BR' AND ftrl.AD_Form_ID = f.AD_Form_ID 
-         WHERE --m.ad_menu_id < 1000000
+         WHERE --m.ad_menu_id < 1000000 AND
            m.action = 'X'
            AND m.isactive = 'Y'
            AND m.ad_form_id = f.ad_form_id

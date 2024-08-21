@@ -19,7 +19,7 @@ cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(t
 --,'en_US_base', m.ad_menu_id, m.ad_task_id, m.NAME,m.description, f.HELP, f.classname, f.ISBETAFUNCTIONALITY
           FROM AD_Menu m, AD_Task f
           LEFT JOIN AD_Task_Trl ttrl ON ttrl.AD_Language = 'pt_BR' and ttrl.ad_task_id = f.ad_task_id
-         WHERE --m.ad_menu_id < 1000000
+         WHERE --m.ad_menu_id < 1000000 AND
            m.action = 'T'
            AND m.isactive = 'Y'
            AND m.ad_task_id = f.ad_task_id

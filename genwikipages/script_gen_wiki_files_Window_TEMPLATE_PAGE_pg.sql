@@ -39,7 +39,7 @@ Tabela ' || t.seqno || ': ' || coalesce(ttrl.name,t.name) || ' - Campos
 |----------|---------------|-----------|--------------------|
 ' || (SELECT
          string_agg(
-            ' | ' || coalesce(f.name,'') ||
+            '| ' || coalesce(f.name,'') ||
             ' | ' || encodehtml(coalesce(f.description,'')) ||
             ' | ' || encodehtml(coalesce(f.help,'')) ||
             ' | [' || coalesce(lower(dbtable), '') || '](https://schemaspy.brerp.com.br/adempiere/tables/' || coalesce(lower(dbtable), '') || '.html)' ||'.'|| coalesce(dbcolumn,'') ||
@@ -58,7 +58,7 @@ Tabela ' || t.seqno || ': ' || coalesce(ttrl.name,t.name) || ' - Campos
                 WHERE t.isactive='Y'
                 GROUP BY t.ad_window_id
              ) AS tab ON (tab.ad_window_id=w.ad_window_id)
-    WHERE --m.ad_menu_id < 1000000
+    WHERE --m.ad_menu_id < 1000000 AND
          m.action = 'W'
         AND m.isactive = 'Y'
     ORDER BY w.ad_window_id;
