@@ -88,7 +88,7 @@ do
 
 		namet=`echo $name | tr ' ' '_' | tr '/' '-'`
 		actionl=`echo "$action" | tr '[:upper:]' '[:lower:]'`
-		echo "| [${name}](./${actionl}/${name_encoded}_${action}_ID-${id}_v12.0.0.md) | $action | <small><br/> $technical <br/></small> |<br/>"
+		echo "| [${name}](./${actionl}/${name_encoded}_${action}_ID-${id}_v11.0.0.md) | $action | <small><br/> $technical <br/></small> |<br/>"
     fi
 done
 

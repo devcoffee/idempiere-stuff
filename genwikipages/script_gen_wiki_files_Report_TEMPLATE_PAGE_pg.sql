@@ -2,14 +2,14 @@
 -- psql -h db-dev.devcoffee.cloud  -d mht_cd10 -U adempiere -q -P tuples_only=on -P footer=off -Pborder=0 -P format=unaligned -f script_gen_wiki_files_Report_TEMPLATE_PAGE_pg.sql > ./docs/script_gen_wiki_files_Report_TEMPLATE_PAGE_pg.sh
 -- and then execute the generated script
 SELECT
-'cat > ./report/'||regexp_replace(unaccent(coalesce(ptrl.name,f.name)), '[^\w]+','','g')||'_Report_ID-'||f.ad_process_id||'_v12.0.0.md <<!
+'cat > ./report/'||regexp_replace(unaccent(coalesce(ptrl.name,f.name)), '[^\w]+','','g')||'_Report_ID-'||f.ad_process_id||'_v11.0.0.md <<!
 # Relatório: '||coalesce(ptrl.name,f.name)||'
 
 **[Criado em:** ' || to_char(f.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(f.updated,'dd/mm/YYYY') || ' **]**  
 **Descrição:** '||encodehtml(coalesce(coalesce(ptrl.description,f.description),''))||'  
 **Ajuda:** '||encodehtml(coalesce(coalesce(ptrl.help,f.help),''))||'  
 
-![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(ptrl.name,f.name)), '[^\w]+','','g')||'-Report_BrERP_v12.0.0.png)
+![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(ptrl.name,f.name)), '[^\w]+','','g')||'-Report_BrERP_v11.0.0.png)
 
 '|| CASE WHEN (SELECT count(*) FROM ad_process_para pp WHERE pp.ad_process_id=f.ad_process_id AND pp.isactive='Y')>0
 THEN
@@ -20,7 +20,7 @@ THEN
 
 !
 
-cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(ptrl.name,f.name)), '[^\w]+','','g')||'-Report_BrERP_v12.0.0.png
+cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(ptrl.name,f.name)), '[^\w]+','','g')||'-Report_BrERP_v11.0.0.png
 
 ' AS wikitext
 --,m.ad_menu_id, m.ad_process_id, m.NAME, m.description, p.HELP, rv.NAME AS repviewname, p.procedurename, p.classname, p.VALUE AS searchkey, p.ISBETAFUNCTIONALITY

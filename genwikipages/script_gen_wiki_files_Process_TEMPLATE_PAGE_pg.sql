@@ -2,7 +2,7 @@
 -- psql -h db-dev.devcoffee.cloud  -d mht_cd10 -U adempiere -q -P tuples_only=on -P footer=off -Pborder=0 -P format=unaligned -f script_gen_wiki_files_Process_TEMPLATE_PAGE_pg.sql > ./docs/script_gen_wiki_files_Process_TEMPLATE_PAGE_pg.sh
 -- and then execute the generated script
 SELECT
-'cat > ./process/'||regexp_replace(unaccent(coalesce(ptrl.name,f.name)), '[^\w]+','','g')||'_Process_ID-'||f.ad_process_id||'_v12.0.0.md <<!
+'cat > ./process/'||regexp_replace(unaccent(coalesce(ptrl.name,f.name)), '[^\w]+','','g')||'_Process_ID-'||f.ad_process_id||'_v11.0.0.md <<!
 # Processo: '|| coalesce(ptrl.name,f.name)||' 
 
 **[Criado em:** ' || to_char(f.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(f.updated,'dd/mm/YYYY') || ' **]**  
@@ -10,7 +10,7 @@ SELECT
 **Ajuda:** '||encodehtml(coalesce(coalesce(ptrl.help,f.help),''))||'  
 **Classe:** ['||coalesce(f.classname,'')||'](https://javadoc.brerp.com.br/API/'|| replace(coalesce(f.classname,''),'.','/') || '.html)
 
-![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(ptrl.name,f.name)), '[^\w]+','','g')||'-Process_BrERP_v12.0.0.png)
+![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(ptrl.name,f.name)), '[^\w]+','','g')||'-Process_BrERP_v11.0.0.png)
 
 ' || CASE WHEN (SELECT count(*) FROM ad_process_para pp WHERE pp.ad_process_id=f.ad_process_id AND pp.isactive='Y')>0
 THEN 
@@ -21,7 +21,7 @@ THEN
 
 !
 
-cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(ptrl.name,f.name)), '[^\w]+','','g')||'-Process_BrERP_v12.0.0.png
+cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(ptrl.name,f.name)), '[^\w]+','','g')||'-Process_BrERP_v11.0.0.png
 
 ' AS wikitext
 FROM AD_Menu m

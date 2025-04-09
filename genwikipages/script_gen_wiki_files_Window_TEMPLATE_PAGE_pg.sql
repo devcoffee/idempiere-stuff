@@ -4,19 +4,19 @@
 -- and then execute the generated script
 
 SELECT
-'cat <<! | sed -e ''$d'' | sed -e ''$d'' > ./window/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g')||'_Window_ID-'||w.ad_Window_id||'_v12.0.0.md
+'cat <<! | sed -e ''$d'' | sed -e ''$d'' > ./window/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g')||'_Window_ID-'||w.ad_Window_id||'_v11.0.0.md
 # Janela: '||coalesce(wtrl.name,w.name)|| '
 
 **[Criado em:** ' || to_char(w.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(w.updated,'dd/mm/YYYY') || ' **]**  
 **Descrição:** '||encodehtml(coalesce(coalesce(wtrl.description,w.description),''))|| '  
 **Ajuda:** '||encodehtml(coalesce(coalesce(wtrl.help,w.help),'')) || '  
-![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g') || '-Window_BrERP_v12.0.0.png)'|| '
+![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g') || '-Window_BrERP_v11.0.0.png)'|| '
 
 ' || coalesce(tab.tabs,'') || '
 
 !
 
-cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g') || '-Window_BrERP_v12.0.0.png
+cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g') || '-Window_BrERP_v11.0.0.png
 
 ' AS wikitext
 --,ad_language, ad_window_id, ad_tab_id, ad_field_id, TYPE, NAME, description, HELP, seqtab, seqfld, dbtable, dbcolumn, dbtype, adempieretype, ISBETAFUNCTIONALITY
