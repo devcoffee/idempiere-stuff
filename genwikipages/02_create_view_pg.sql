@@ -269,38 +269,28 @@ AS
 
 
 
-CREATE OR REPLACE  FUNCTION encodehtml(str TEXT) RETURNS TEXT AS $$
-    from re import compile 
-    from re import sub
-    from html import escape
+CREATE OR REPLACE FUNCTION encodehtml(str TEXT) RETURNS TEXT AS $$
+    from re import compile, sub, DOTALL
+    from html import escape, unescape
 
     if str is None:
         return str
    
-    pattern = compile('<.*?>')
-    local_str = sub(pattern, '', str)
+    local_str = unescape(str)
+    pattern = compile('<[^>]+>', DOTALL)
+    local_str = sub(pattern, '', local_str)
     
     escape_map = { 
-    # '\\' : '\\\\', 
-    #'`' : '\`' , 
-    #'_' : '\_' , 
-    #'*' : '\*' , 
     '{' : '&#123;' , 
     '}' : '&#125;' , 
-    #'[' : '\[' , 
-    #']' : '\]' , 
-    #'#' : '\#' , 
-    #'+' : '\+' , 
-    #'-' : '\-' ,
-    #'.' : '\.' , 
-    #'!' : '\!' , 
-    '\n' : '' , 
+    '\n' : '<br/>' , 
     '\t' : '' ,  
-    '\r' : ''}
+    '\r' : '' ,
+    '<>'  : '\\<>'}
     for search, replace in escape_map.items():
         local_str = local_str.replace(search, replace)
    
-    local_str = escape(local_str).strip();
+    local_str = local_str.strip()
 
     return local_str;
 $$ LANGUAGE plpython3u;

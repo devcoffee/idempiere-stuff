@@ -6,6 +6,8 @@
 #
 # No servidor é necessário ter as extensions unaccent e plpython3u instaladas
 
+export LANG=pt_BR.UTF-8
+
 DOTFILE="../config.env"
 OUTPUT_DIR="./docs"
 IMG_DIR="./img"
