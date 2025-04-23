@@ -5,7 +5,7 @@ SELECT
 'cat > ./task/'||regexp_replace(unaccent(coalesce(ttrl.name,f.name)), '[^\w]+','','g')||'_Task_ID-'||f.ad_task_id||'_v11.0.0.md <<!
 # Tarefa: '||coalesce(ttrl.name,f.name)||' 
 
-**[Criado em:** ' || to_char(f.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(f.updated,'dd/mm/YYYY') || ' **]**  
+**[ Criado em:** ' || to_char(f.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(f.updated,'dd/mm/YYYY') || ' **]**  
 **Descrição:** '||encodehtml(coalesce(coalesce(ttrl.description,f.description),''))||'  
 **Ajuda:** '||encodehtml(coalesce(coalesce(ttrl.help,f.help),''))||'
 
@@ -13,7 +13,7 @@ SELECT
 
 !
 
-cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(ttrl.name,f.name)), '[^\w]+','','g')||'-Task_BrERP_v11.0.0.png
+cp --update=none ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(ttrl.name,f.name)), '[^\w]+','','g')||'-Task_BrERP_v11.0.0.png
 
 ' AS wikitext
 --,'en_US_base', m.ad_menu_id, m.ad_task_id, m.NAME,m.description, f.HELP, f.classname, f.ISBETAFUNCTIONALITY

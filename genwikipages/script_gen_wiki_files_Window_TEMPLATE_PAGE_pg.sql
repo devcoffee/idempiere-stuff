@@ -16,7 +16,7 @@ SELECT
 
 !
 
-cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g') || '-Window_BrERP_v11.0.0.png
+cp --update=none ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(wtrl.name,w.name)), '[^\w]+','','g') || '-Window_BrERP_v11.0.0.png
 
 ' AS wikitext
 --,ad_language, ad_window_id, ad_tab_id, ad_field_id, TYPE, NAME, description, HELP, seqtab, seqfld, dbtable, dbcolumn, dbtype, adempieretype, ISBETAFUNCTIONALITY
@@ -27,7 +27,7 @@ cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(w
             SELECT t.ad_window_id, 
                    string_agg('### Aba: '|| coalesce(ttrl.name,t.name) || '
 
-**[Criado em:** ' || to_char(t.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(t.updated,'dd/mm/YYYY') || ' **]**   
+**[ Criado em:** ' || to_char(t.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(t.updated,'dd/mm/YYYY') || ' **]**   
 **Descrição:** ' ||encodehtml(coalesce(coalesce(ttrl.description,t.description),'')) || '  
 **Ajuda:** ' ||encodehtml(coalesce(coalesce(ttrl.help,t.help),'')) || '  
 **Nível da Aba:** ' ||coalesce(t.tablevel::text,'') || '

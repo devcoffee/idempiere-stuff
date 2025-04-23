@@ -5,16 +5,16 @@ SELECT
 'cat > ./form/'||regexp_replace(unaccent(coalesce(ftrl.name,f.name)), '[^\w]+','','g')||'_Form_ID-'||f.ad_form_id||'_v11.0.0.md <<!
 # Formulário: '||coalesce(ftrl.name,f.name)||'
 
-**[Criado em:** ' || to_char(f.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(f.updated,'dd/mm/YYYY') || ' **]**  
+**[ Criado em:** ' || to_char(f.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(f.updated,'dd/mm/YYYY') || ' **]**  
 **Descrição:** '||encodehtml(coalesce(coalesce(ftrl.description,f.description),''))||'  
-**Ajuda:** '||encodehtml(coalesce(coalesce(ftrl.help,f.help),''))||'
+**Ajuda:** '||encodehtml(coalesce(coalesce(ftrl.help,f.help),''))||'  
 **Classe:** ['||coalesce(f.classname,'')||'](https://javadoc.brerp.com.br/API/'|| replace(coalesce(f.classname,''),'.','/') || '.html)
 
 ![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(ftrl.name,f.name)), '[^\w]+','','g')||'-Form_BrERP_v11.0.0.png)
 
 !
 
-cp -n ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(ftrl.name,f.name)), '[^\w]+','','g')||'-Form_BrERP_v11.0.0.png
+cp --update=none ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(ftrl.name,f.name)), '[^\w]+','','g')||'-Form_BrERP_v11.0.0.png
 
 ' AS wikitext
 --,'en_US_base', m.ad_menu_id, m.ad_form_id, m.NAME,m.description, f.HELP, f.classname, f.ISBETAFUNCTIONALITY
