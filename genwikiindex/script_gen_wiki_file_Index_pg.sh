@@ -40,8 +40,9 @@ while IFS=, read node_id parent_id level seqno issummary name type action techni
 do
     name=`echo $name | tr '|' ','`
 	name_encoded=`echo $name_encoded | tr '|' ','`
+	level=$((level + 1))
     sec=""
-    if [ "$level" -lt 4 ]
+    if [ "$level" -lt 5 ]
     then
         if [ "$issummary" = "Y" ]
 		then
@@ -57,7 +58,7 @@ do
 			echo
 	    	opentable="N"
 		fi
-		if [ "$level" -eq 1 ]
+		if [ "$level" -eq 2 ]
 		then
 			# Insert Empty Line
 			echo
@@ -68,7 +69,7 @@ do
 		echo
     else
 	 	# Table Format
-		if [ "$opentable" = "Y" ] && [ "$level" -eq 1 ]
+		if [ "$opentable" = "Y" ] && [ "$level" -eq 2 ]
 		then
 		 	# Table is Open -> Close Table
 			echo
@@ -88,7 +89,7 @@ do
 
 		namet=`echo $name | tr ' ' '_' | tr '/' '-'`
 		actionl=`echo "$action" | tr '[:upper:]' '[:lower:]'`
-		echo "| [${name}](./${actionl}/${name_encoded}_${action}_ID-${id}_v11.0.0.md) | $action | <small><br/> $technical <br/></small> |<br/>"
+		echo "| [${name}](./${actionl}/${name_encoded}_${action}_ID-${id}_v12.0.0.md) | $action | <small><br/> $technical <br/></small> |<br/>"
     fi
 done
 

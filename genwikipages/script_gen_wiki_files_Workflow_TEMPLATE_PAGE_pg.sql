@@ -2,14 +2,14 @@
 -- psql -h db-dev.devcoffee.cloud -d mht_cd10 -U adempiere -q -P tuples_only=on -P footer=off -Pborder=0 -P format=unaligned -f script_gen_wiki_files_Workflow_TEMPLATE_PAGE_pg.sql > ./docs/script_gen_wiki_files_Workflow_TEMPLATE_PAGE_pg.sh
 -- and then execute the generated script
 SELECT
-'cat > "./workflow/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'_Workflow_ID-'||f.ad_workflow_id||'_v11.0.0.md" <<!
+'cat > "./workflow/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'_Workflow_ID-'||f.ad_workflow_id||'_v12.0.0.md" <<!
 # Fluxo de Trabalho: '||coalesce(wtrl.name,f.name)||' 
 
 **[ Criado em:** ' || to_char(f.created,'dd/mm/YYYY') || ' - **Atualizado em:** ' || to_char(f.updated,'dd/mm/YYYY') || ' **]**  
 **Descrição:** '||encodehtml(coalesce(coalesce(wtrl.description,f.description),''))||'  
 **Ajuda:** '||encodehtml(coalesce(coalesce(wtrl.help,f.help),''))||'
 
-![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'-Workflow_BrERP_v11.0.0.png)
+![](/img/system-manual/brerp/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'-Workflow_BrERP_v12.0.0.png)
 
 Tabela: Campos
 
@@ -21,7 +21,7 @@ coalesce(nodes.nodes,'')
 
 !
 
-cp --update=none ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'-Workflow_BrERP_v11.0.0.png
+cp --update=none ../static/placeholder.png ../img_all/'||regexp_replace(unaccent(coalesce(wtrl.name,f.name)), '[^\w]+','','g')||'-Workflow_BrERP_v12.0.0.png
 
 ' AS wikitext
 --,'en_US_base', 'F' AS TYPE, m.ad_menu_id, m.ad_workflow_id, m.NAME,m.description, f.HELP, f.ISBETAFUNCTIONALITY
